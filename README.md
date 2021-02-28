@@ -7,7 +7,7 @@ PROG          := FUNC PROG
 
 FUNC          := def ID ([ TYPE ID , TYPE ID , ...]) : type {EXPRESSIONS}
 
-PRINT         := out << ADD
+PRINT         := out << VALUE
 
 READ          := in >> ID
 
@@ -45,9 +45,9 @@ RANGE'        := to ID
 
 COND          := (BOOLOP) -> { EXPRESSIONS } [else -> { EXPRESSIONS }] 
 
-==================================
 
-VALUE         := EXPR OP 
+VALUE         := EXPR OP | STR
+
 OP := RELOP EXPR | epsilon
 
 BOOLOP := EXPR RELOP EXPR
@@ -64,7 +64,9 @@ TERM := FACT { MULOP FACT }
 
 MULOP := * | /
 
-FACT := ID | NUMBER | ( EXPR ) | BOOL | REAL
+FACT := ID ARG | NUMBER | ( EXPR ) | BOOL | REAL
+
+ARG  := ([ TYPE ID , TYPE ID , ...]) | epsilon
 
 
 ID            := LETTRE [LETTRE | CHIFFRE] 
@@ -83,4 +85,5 @@ TYPE          := int ['[NUMBER]']
                 | char ['[NUMBER]']
                 | String
                 | ID
+STR           := " SIGMA* "
 ```
