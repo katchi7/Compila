@@ -4,21 +4,29 @@
 PROG          := FUNC PROG 
                  | TYPE_DEF PROG
                  | epsilon 
+TYPE_DEF      := typedef ID { TYPE ID  [, TYPE ID , ... ] }
 
 FUNC          := def ID ([ TYPE ID , TYPE ID , ...]) : TYPE {EXPRESSIONS}
+
+EXPRESSIONS   := LOOP 
+                | COND 
+                | FOR
+                | EXP $ EXPRESSIONS 
+                | epsilon 
+                
+TYPE          := int ['[NUMBER]'] 
+                | boolean 
+                | float ['[NUMBER]'] 
+                | char ['[NUMBER]']
+                | String
+                | ID
+                
+========================================================================
 
 PRINT         := out << VALUE
 
 READ          := in >> ID
 
-
-EXPRESSIONS   := LOOP 
-                | COND 
-                | EXP $ EXPRESSIONS 
-                | epsilon 
-                
-
-TYPE_DEF      := typedef ID { TYPE ID  [, TYPE ID , ... ] }
 
 EXP      := ID EXP' | READ | PRINT
 
@@ -81,11 +89,5 @@ CHIFFRE       := 0|..|9
 
 LETTRE        := a|b|..|z|A|..|Z 
 
-TYPE          := int ['[NUMBER]'] 
-                | boolean 
-                | float ['[NUMBER]'] 
-                | char ['[NUMBER]']
-                | String
-                | ID
 STR           := " SIGMA* "
 ```

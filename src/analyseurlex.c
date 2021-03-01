@@ -86,6 +86,14 @@ OUTPUT* LireMot(){
         output->Code=TYPE_STRING_TOKEN;
         return output;
     }
+    if(strcmp(output->NOM,"true")==0){
+        output->Code=BOOLEAN_TRUE_TOKEN;
+        return output;
+    }
+    if(strcmp(output->NOM,"false")==0){
+        output->Code=BOOLEAN_FALSE_TOKEN;
+        return output;
+    }
     output->Code = ID_TOKEN;
    
     return output;
