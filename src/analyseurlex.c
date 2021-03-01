@@ -75,7 +75,11 @@ OUTPUT* LireMot(){
     }if(strcmp(output->NOM,"float")==0){
         output->Code=TYPE_FLOAT_TOKEN;
         return output;
-    }if(strcmp(output->NOM,"char")==0){
+    }if(strcmp(output->NOM,"int")==0){
+        output->Code=TYPE_INT_TOKEN;
+        return output;
+    }
+    if(strcmp(output->NOM,"char")==0){
         output->Code=TYPE_CHAR_TOKEN;
         return output;
     }if(strcmp(output->NOM,"string")==0){
@@ -123,7 +127,19 @@ OUTPUT* Lire_Car(){
         break;
         
     case '-':
-        output->Code = MOINS_TOKEN;
+        LireChar();
+        if(CHAR_COUR=='>'){
+            output->Code = THEN_TOKEN;
+            output->NOM[i]=CHAR_COUR;
+            i++;
+
+        }
+        else{
+            output->Code = MOINS_TOKEN;
+            fseek(f,-1,SEEK_CUR);
+        }
+
+        
         break;
         
     case '*':
@@ -141,8 +157,6 @@ OUTPUT* Lire_Car(){
     case ':':
         
         output->Code = DEC_TOKEN;
-        output->NOM[i]=CHAR_COUR;
-        i++;
         
         break;
         
@@ -184,7 +198,8 @@ OUTPUT* Lire_Car(){
             i++;
             
         }else{
-            output->Code = INF_TOKEN;
+            output->Code = SUP_TOKEN;
+            fseek(f,-1,SEEK_CUR);
         }
         break;
     
@@ -203,21 +218,26 @@ OUTPUT* Lire_Car(){
         break;
     case '[':
         output->Code = CRO_TOKEN;
+
         break; 
     case ']':
         output->Code = CRF_TOKEN;
+        break;
+    case '"':
+        output->Code = STR_TOKEN;
         break;     
     case '=':
         LireChar();
-        if(CHAR_COUR=='='){
+        if(CHAR_COUR == '='){
             output->Code = EQ_TOKEN;
             output->NOM[i]=CHAR_COUR;
             i++;
             
         }else{
             fseek(f,-1,SEEK_CUR);
-            output->Code = EQ_TOKEN;
+            output->Code = AFF_TOKEN;
         }
+        break;
     case '!':
         LireChar();
         if(CHAR_COUR=='='){
@@ -246,6 +266,7 @@ OUTPUT* Lire_Car(){
 void passer(){
     while(CHAR_COUR==' '||CHAR_COUR=='\t'||CHAR_COUR=='\n'){//Passer les separateurs
             LireChar();
+            /*
         while(CHAR_COUR=='{'){//Passer les commentaires
             LireChar();
             if(CHAR_COUR=='*'){
@@ -261,6 +282,7 @@ void passer(){
             }
             LireChar();
         }
+        */
     }
     if(CHAR_COUR==EOF){
         //Erreur(ERR_FICH_VID);
