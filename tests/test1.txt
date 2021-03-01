@@ -1,0 +1,13 @@
+def main(){
+    x : int $
+    y = 50.55 : float $
+
+    in >> x  $
+
+    (x > y or x == 0 ) ->{
+        out << "Yes" $
+    }
+    else -> {
+        out << "no" $
+    }
+}

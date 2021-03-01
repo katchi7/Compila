@@ -5,7 +5,7 @@ PROG          := FUNC PROG
                  | TYPE_DEF PROG
                  | epsilon 
 
-FUNC          := def ID ([ TYPE ID , TYPE ID , ...]) : type {EXPRESSIONS}
+FUNC          := def ID ([ TYPE ID , TYPE ID , ...]) : TYPE {EXPRESSIONS}
 
 PRINT         := out << VALUE
 
@@ -18,9 +18,9 @@ EXPRESSIONS   := LOOP
                 | epsilon 
                 
 
-TYPE_DEF      := typdef ID { TYPE ID  [, TYPE ID , ... ] }
+TYPE_DEF      := typedef ID { TYPE ID  [, TYPE ID , ... ] }
 
-EXP      := ID EXP'
+EXP      := ID EXP' | READ | PRINT
 
 EXP'     := ([ TYPE ID , TYPE ID , ...]) 
             | AFF_DEC 
@@ -74,6 +74,8 @@ ID            := LETTRE [LETTRE | CHIFFRE]
 NUMBER        := CHIFFRE [ CHIFFRE ] 
 
 REAL          := NUMBER . NUMBER
+
+BOOL          := true | false 
 
 CHIFFRE       := 0|..|9 
 
