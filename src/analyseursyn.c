@@ -6,13 +6,14 @@ void Sym_Suiv(){
 }
 
 void parse(){
+    
     Sym_Suiv();
     PROG();
 }
 
 //Error token : TODO Make it print errors depending on error codes
 void Erreur( CODES_LEX cl ){
-    printf("Error while parsing  expected %d  found %d  \n",cl,Sym_Cour->Code);
+    fprintf(stderr,"Error while parsing  expected %d  found %d  \n",cl,Sym_Cour->Code);
 }
 
 //Function that test id a symbole equals the expected token 
@@ -32,6 +33,7 @@ void PROG(){
         //Function
         
         FUNC();
+        
         PROG();
     }
     else if(Sym_Cour->Code==TYPEDEF_TOKEN){
@@ -93,6 +95,7 @@ void FUNC(){
 }
 //typdef
 void TYPE_DEF(){
+    
     Test_Symbole(TYPEDEF_TOKEN);
     Test_Symbole(ID_TOKEN);
     Test_Symbole(ACO_TOKEN);
@@ -113,17 +116,22 @@ void TYPE_DEF(){
 }
 //Checks expressions
 void EXPRESSIONS(){
-    if(Sym_Cour->Code == DO_TOKEN || Sym_Cour->Code == UNTIL_TOKEN ){ LOOP();EXPRESSIONS();}
+    if(Sym_Cour->Code == DO_TOKEN || Sym_Cour->Code == UNTIL_TOKEN ){  LOOP();EXPRESSIONS();}
     else if(Sym_Cour->Code == PO_TOKEN ){  COND();EXPRESSIONS();}
     else if(Sym_Cour->Code == FOR_TOKEN ){ FOR();EXPRESSIONS();}
     else if( Sym_Cour->Code == ID_TOKEN || Sym_Cour->Code == IN_TOKEN 
     || Sym_Cour->Code == OUT_TOKEN || Sym_Cour->Code == RETURN_TOKEN 
     || Sym_Cour->Code == BREAK_TOKEN || Sym_Cour->Code == CONTINUE_TOKEN 
     ||  Sym_Cour->Code == EXIT_TOKEN ){ 
+        
         EXP();
         
         Test_Symbole(DOLLAR_TOKEN);
+        
         EXPRESSIONS();
+        
+        
+         
         }
 }
 //Checks typing
@@ -133,7 +141,7 @@ void TYPE(){
         
         Test_Symbole(TYPE_INT_TOKEN);
         //array
-        if(Sym_Cour->Code == CRO_TOKEN){
+        while(Sym_Cour->Code == CRO_TOKEN  && Sym_Cour->Code != FIN_TOKEN ){
             Test_Symbole(CRO_TOKEN);
             Test_Symbole(NUM_TOKEN);
             Test_Symbole(CRF_TOKEN);
@@ -145,7 +153,7 @@ void TYPE(){
         
         Test_Symbole(TYPE_FLOAT_TOKEN);
         //array
-        if(Sym_Cour->Code == CRO_TOKEN){
+        while(Sym_Cour->Code == CRO_TOKEN  && Sym_Cour->Code != FIN_TOKEN ){
             Test_Symbole(CRO_TOKEN);
             Test_Symbole(NUM_TOKEN);
             Test_Symbole(CRF_TOKEN);
@@ -157,7 +165,7 @@ void TYPE(){
         
         Test_Symbole(TYPE_CHAR_TOKEN);
         //array
-        if(Sym_Cour->Code == CRO_TOKEN){
+        while(Sym_Cour->Code == CRO_TOKEN  && Sym_Cour->Code != FIN_TOKEN ){
             Test_Symbole(CRO_TOKEN);
             Test_Symbole(NUM_TOKEN);
             Test_Symbole(CRF_TOKEN);
@@ -240,9 +248,13 @@ void FOR(){
 }
 void EXP(){
     
+    
     if(Sym_Cour->Code == ID_TOKEN){
+        
         Test_Symbole(ID_TOKEN);
+        
         EXP_();
+       
         return;
     }if(Sym_Cour->Code == IN_TOKEN){
         READ();
@@ -269,7 +281,8 @@ void EXP(){
     PRINT();
 }
 void EXP_(){
-    if(Sym_Cour->Code == PO_TOKEN){
+    
+    if(Sym_Cour->Code == PO_TOKEN ) {
         Test_Symbole(PO_TOKEN);
         int i=0;
         while ( Sym_Cour->Code != PF_TOKEN &&  Sym_Cour->Code != FIN_TOKEN )
@@ -287,8 +300,12 @@ void EXP_(){
         Test_Symbole(PF_TOKEN);
         return;
     }
-    if(Sym_Cour->Code == AFF_TOKEN || Sym_Cour->Code == PT_TOKEN ){
+    if(Sym_Cour->Code == AFF_TOKEN || Sym_Cour->Code == PT_TOKEN  || Sym_Cour->Code ==  CRO_TOKEN ){
+        
+        
         AFF_DEC();
+        
+         
         return;
     }
     if(Sym_Cour->Code == DEC_TOKEN){
@@ -298,9 +315,23 @@ void EXP_(){
 
 void AFF_DEC(){
     if(Sym_Cour->Code == AFF_TOKEN){
+        
         Test_Symbole(AFF_TOKEN);
+        
         VALUE();
+        
         AFF_DEC_();
+        return;
+        
+    }
+    if(Sym_Cour->Code == CRO_TOKEN){
+        
+        Test_Symbole(CRO_TOKEN);
+        
+        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(CRF_TOKEN);
+        
+        AFF();
     }else{
         Test_Symbole(PT_TOKEN);
         Test_Symbole(ID_TOKEN);
@@ -310,10 +341,24 @@ void AFF_DEC(){
 }
 
 void AFF(){
+    
     if(Sym_Cour->Code == AFF_TOKEN){
+        
+        
         Test_Symbole(AFF_TOKEN);
+        
         VALUE();
-    }else{
+        
+        return;
+    }
+    if(Sym_Cour->Code == CRO_TOKEN){
+        Test_Symbole(CRO_TOKEN);
+        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(CRF_TOKEN);
+        AFF();
+        return;
+    }
+    else{
         Test_Symbole(PT_TOKEN);
         Test_Symbole(ID_TOKEN);
         AFF();
@@ -370,19 +415,21 @@ void BOUND(){
 
 void VALUE(){
     
-    if(Sym_Cour->Code == TXT_TOKEN){Test_Symbole(CHAR_COUR);
-    
+    if(Sym_Cour->Code == TXT_TOKEN){
         STR();
         return;
     }else if(Sym_Cour->Code == CHAR_TOKEN){
         
         Test_Symbole(CHAR_TOKEN);
+        return;
         
     }
     else{
         
         EXPR();
+        
         OP();
+        
     }
 }
 void OP(){
@@ -420,6 +467,7 @@ int isMULOP(){
     return (Sym_Cour->Code == MULT_TOKEN || Sym_Cour->Code == DIV_TOKEN );
 }
 void EXPR_(){
+    
     if(isADDOP() || isRELOP()){
         Sym_Suiv();
         TERM();
@@ -429,9 +477,14 @@ int isADDOP(){
     return (Sym_Cour->Code == MOINS_TOKEN || Sym_Cour->Code == PLUS_TOKEN );
 }
 void FACT(){
+
+    
     if(Sym_Cour->Code == ID_TOKEN){
+
         Test_Symbole(ID_TOKEN);
+        
         ARG();
+        
         return;
     }
     if(Sym_Cour->Code == NUM_TOKEN){
@@ -492,27 +545,53 @@ void ARG(){
             if(i!=0) Test_Symbole(VIR_TOKEN);
             
             Test_Symbole(ID_TOKEN);
-            if( Sym_Cour->Code == PT_TOKEN ){
-            do{
-                Test_Symbole(PT_TOKEN);
-                Test_Symbole(ID_TOKEN);
-            }while(Sym_Cour->Code == PT_TOKEN);
-    }
             i++;
         }
-        if( Sym_Cour->Code ==  FIN_TOKEN) return;
+        if(Sym_Cour->Code == FIN_TOKEN) return;
+
         Test_Symbole(PF_TOKEN);
-        
+        ARG_(); 
+        return;
+            
     }
+        
     if( Sym_Cour->Code == PT_TOKEN ){
-        do{
+            
             Test_Symbole(PT_TOKEN);
             Test_Symbole(ID_TOKEN);
-        }while(Sym_Cour->Code == PT_TOKEN);
+            ARG_();
+            return;
     }
+    if(Sym_Cour->Code == CRO_TOKEN ){
+        
+        Test_Symbole(CRO_TOKEN);
+        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(CRF_TOKEN);
+        if(Sym_Cour->Code == CRO_TOKEN)
+        ARG_();
+        
+        
+        return;
+    }
+    
 }
 
-//Gotta create a string parser
+void ARG_(){
+    if( Sym_Cour->Code == PT_TOKEN ){
+            
+        Test_Symbole(PT_TOKEN);
+        Test_Symbole(ID_TOKEN);
+        ARG_();
+        return;
+    }if(Sym_Cour->Code == CRO_TOKEN ){
+        
+        Test_Symbole(CRO_TOKEN);
+        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(CRF_TOKEN);
+        ARG_();
+        return;
+    }
+}
 
 void STR(){
     

@@ -14,10 +14,10 @@ EXPRESSIONS   := LOOP EXPRESSIONS
                 | EXP $ EXPRESSIONS 
                 | epsilon 
                 
-TYPE          := int ['[NUMBER]'] 
+TYPE          := int ['[NUMBER][NUMBER]...'] 
                 | boolean 
-                | float ['[NUMBER]'] 
-                | char ['[NUMBER]']
+                | float ['[NUMBER][NUMBER]...'] 
+                | char ['[NUMBER][NUMBER]...']
                 | String
                 | void
                 | ID
@@ -37,11 +37,11 @@ EXP'     := ([VALUE , VALUE , ...])
             | AFF_DEC 
             | DEC
 
-AFF_DEC  := = VALUE AFF_DEC' | . ID AFF
+AFF_DEC  := = VALUE AFF_DEC' | . ID AFF || [NUMBER] AFF
 
 AFF_DEC' := DEC | epsilone
 
-AFF := . ID AFF | = VALUE 
+AFF := . ID AFF | [NUMBER] AFF | = VALUE 
 
 DEC           := : TYPE 
 
@@ -77,7 +77,9 @@ MULOP := * | /
 
 FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL  | CHAR
 
-ARG  := ([ ID[. ID ...] , ID[. ID ...] , ...])| . ID[. ID ...]  | epsilon
+ARG  := ([ ID[. ID ...] , ID[. ID ...] , ...]) ARG' | . ID ARG' | [NUMBER] ARG' | epsilon
+
+ARG':= . ID ARG' | [NUMBER] ARG' | epsilon
 
 
 ID            := LETTRE [LETTRE | CHIFFRE] 

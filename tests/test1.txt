@@ -1,4 +1,3 @@
-
 typedef myType {
     int size,
     char[50] name,
@@ -6,13 +5,12 @@ typedef myType {
 }
 
 def main() : void {
-    x = 'x' : char $
-    (x == 'x') -> {
-        out << x $
-    }
-    else -> {
-        test = 'x'$
+    
+    y = '5' : char$
+    x = str[3] : char $
+
+    (y=='5')->{
+        out<<"ERROR"$
     }
     
 }
-

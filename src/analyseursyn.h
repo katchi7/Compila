@@ -32,6 +32,7 @@ int isMULOP();
 int isADDOP();
 int isBOOL();
 void ARG();
+void ARG_();
 void AFF();
 
 #endif
