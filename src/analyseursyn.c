@@ -1,28 +1,37 @@
 #include "analyseurlex.h"
+#include "analyseursyn.h"
 //Next token
 void Sym_Suiv(){
     Sym_Cour = analyseurLexical();
 }
 
+void parse(){
+    Sym_Suiv();
+    PROG();
+}
+
 //Error token : TODO Make it print errors depending on error codes
-Erreur(){
-    printf("Error while parsing\n");
+void Erreur( CODES_LEX cl ){
+    printf("Error while parsing  expected %d  found %d  \n",cl,Sym_Cour->Code);
 }
 
 //Function that test id a symbole equals the expected token 
 void Test_Symbole(CODES_LEX cl){
+    
     if(Sym_Cour->Code == cl){
         Sym_Suiv();
     }
     else{
-     Erreur();}
+     Erreur(cl );}
 }
 //All the program
-void Prog(){
+void PROG(){
+    
     if(Sym_Cour->Code == DEF_TOKEN){
+        
         //Function
         FUNC();
-        Prog();
+        PROG();
     }
     else if(Sym_Cour->Code==TYPEDEF_TOKEN){
         //Type Def
@@ -31,19 +40,23 @@ void Prog(){
     }
     else{
         if(Sym_Cour->Code != FIN_TOKEN ) {
-            Erreur();
+            Erreur(FIN_TOKEN);
         }
     }
 }
 //Functions
 void FUNC(){
+    
     // Declaring a function
     Test_Symbole(DEF_TOKEN);
+    
     Test_Symbole(ID_TOKEN);
     Test_Symbole(PO_TOKEN);
+    
     int i=0;
     while (Sym_Cour->Code != PF_TOKEN && Sym_Cour->Code != FIN_TOKEN )
     {
+        
         if(i!=0){
             Test_Symbole(VIR_TOKEN);
         }
@@ -53,15 +66,26 @@ void FUNC(){
     }
     //Found EOF token before )
     if(Sym_Cour->Code == FIN_TOKEN){
-        Erreur();
+        Erreur(FIN_TOKEN);
+        
         return;
     }
+    
     Test_Symbole(PF_TOKEN);
+    
     Test_Symbole(DEC_TOKEN);
+    
+    
     TYPE();
+    
+    
     Test_Symbole(ACO_TOKEN);
+    
+    
     EXPRESSIONS();
+    
     Test_Symbole(ACF_TOKEN);
+    
 
     
 }
@@ -80,7 +104,7 @@ void TYPE_DEF(){
     } while (Sym_Cour->Code != ACF_TOKEN && Sym_Cour->Code != FIN_TOKEN );
     
     if(Sym_Cour->Code == FIN_TOKEN){
-        Erreur();
+        Erreur(FIN_TOKEN);
         return;
     }
     Test_Symbole(ACF_TOKEN);
@@ -92,6 +116,8 @@ void EXPRESSIONS(){
     else if(Sym_Cour->Code == FOR_TOKEN ) FOR();
     else if( Sym_Cour->Code == ID_TOKEN || Sym_Cour->Code == IN_TOKEN || Sym_Cour->Code == OUT_TOKEN ){ 
         EXP();
+        
+        Test_Symbole(DOLLAR_TOKEN);
         EXPRESSIONS();
         }
 }
@@ -145,4 +171,274 @@ void TYPE(){
     }
     Test_Symbole(ID_TOKEN);
 
+}
+//Boucles
+void LOOP(){
+    //until(BOOLOP){EXPRESSIONS}
+    if(Sym_Cour->Code == UNTIL_TOKEN){
+        Test_Symbole(UNTIL_TOKEN);
+        Test_Symbole(PO_TOKEN);
+        BOOLOP();
+        Test_Symbole(PF_TOKEN);
+        Test_Symbole(ACO_TOKEN);
+        EXPRESSIONS();
+        Test_Symbole(ACF_TOKEN);
+    }
+    else{
+        Test_Symbole(DO_TOKEN);
+        Test_Symbole(ACO_TOKEN);
+        EXPRESSIONS();
+        Test_Symbole(ACF_TOKEN);
+        Test_Symbole(UNTIL_TOKEN);
+        Test_Symbole(PO_TOKEN);
+        BOOLOP();
+        Test_Symbole(PF_TOKEN);
+    }
+    
+}
+void COND(){
+    //(BOOLOP)->{EXPRESSIONS}[else->{EXPRESSIONS}]
+    Test_Symbole(PO_TOKEN);
+    BOOLOP();
+    Test_Symbole(PF_TOKEN);
+    Test_Symbole(THEN_TOKEN);
+    Test_Symbole(ACO_TOKEN);
+    EXPRESSIONS();
+    Test_Symbole(ACF_TOKEN);
+    //else
+    if( Sym_Cour->Code == ELSE_TOKEN ){
+        Test_Symbole(ELSE_TOKEN);
+        Test_Symbole(THEN_TOKEN);
+        Test_Symbole(ACO_TOKEN);
+        EXPRESSIONS();
+        Test_Symbole(ACF_TOKEN);
+    }
+}
+void FOR(){
+    Test_Symbole(FOR_TOKEN);
+    Test_Symbole(PO_TOKEN);
+    Test_Symbole(ID_TOKEN);
+    Test_Symbole(IN_TOKEN);
+    RANGE();
+    Test_Symbole(PF_TOKEN);
+    Test_Symbole(ACO_TOKEN);
+    EXPRESSIONS();
+    Test_Symbole(ACF_TOKEN);
+}
+void EXP(){
+    if(Sym_Cour->Code == ID_TOKEN){
+        Test_Symbole(ID_TOKEN);
+        EXP_();
+    }else if(Sym_Cour->Code == IN_TOKEN){
+        READ();
+    }else{
+        PRINT();
+    }
+}
+void EXP_(){
+    if(Sym_Cour->Code == PO_TOKEN){
+        Test_Symbole(PO_TOKEN);
+        int i=0;
+        while ( Sym_Cour->Code != PF_TOKEN &&  Sym_Cour->Code != FIN_TOKEN )
+        {
+            if(i!=0){
+                Test_Symbole(VIR_TOKEN);
+                
+            }
+            TYPE();
+            Test_Symbole(ID_TOKEN);
+            i++;
+        }
+        if(Sym_Cour->Code == FIN_TOKEN){
+            return;
+        }
+        Test_Symbole(PF_TOKEN);
+        return;
+    }
+    if(Sym_Cour->Code == AFF_TOKEN){
+        AFF_DEC();
+        return;
+    }
+    if(Sym_Cour->Code == DEC_TOKEN){
+        DEC();
+    }
+}
+
+void AFF_DEC(){
+    Test_Symbole(AFF_TOKEN);
+    VALUE();
+    AFF_DEC_();
+}
+
+void AFF_DEC_(){
+    if(Sym_Cour->Code == DEC_TOKEN){
+        DEC();
+        return;
+    }
+
+}
+
+void DEC(){
+    Test_Symbole(DEC_TOKEN);
+    TYPE();
+}
+
+void READ(){
+    Test_Symbole(IN_TOKEN);
+    Test_Symbole(READ_TOKEN);
+    Test_Symbole(ID_TOKEN);
+}
+void PRINT(){
+    Test_Symbole(OUT_TOKEN);
+    Test_Symbole(WRITE_TOKEN);
+    VALUE();
+}
+void RANGE(){
+    if (Sym_Cour->Code == ID_TOKEN)
+    {
+        //ID RANGE'
+        Test_Symbole(ID_TOKEN);
+        RANGE_();
+    }
+    if (Sym_Cour->Code == NUM_TOKEN)
+    {
+        //NUMBER to NUMBER
+        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(TO_TOKEN);
+        Test_Symbole(NUM_TOKEN);
+        
+    }
+    
+}
+
+void RANGE_(){
+
+    if (Sym_Cour->Code == TO_TOKEN){
+        Test_Symbole(TO_TOKEN);
+        Test_Symbole(ID_TOKEN);
+        return;
+    }
+
+}
+
+void VALUE(){
+    
+    if(Sym_Cour->Code == STR_TOKEN){
+        
+        STR();
+        fprintf(stderr,"\nHERE\n");
+    }else{
+        EXPR();
+        OP();
+    }
+}
+void OP(){
+    if(isRELOP()){
+        Sym_Suiv();
+        EXPR();
+    }
+}
+
+
+int isRELOP(){
+    return (Sym_Cour->Code == EQ_TOKEN || Sym_Cour->Code == DIFF_TOKEN 
+    || Sym_Cour->Code == DIFF2_TOKEN || Sym_Cour->Code == SUP_TOKEN 
+    || Sym_Cour->Code == INF_TOKEN || Sym_Cour->Code == SUPEG_TOKEN 
+    || Sym_Cour->Code == INFEG_TOKEN || Sym_Cour->Code == AND_TOKEN 
+    || Sym_Cour->Code == OR_TOKEN );
+}
+
+
+void EXPR(){
+    TERM();
+    EXPR_();
+}
+void TERM(){
+    FACT();
+    if(isMULOP()){
+        Sym_Suiv();
+        FACT();
+    }
+}
+int isMULOP(){
+    return (Sym_Cour->Code == MULT_TOKEN || Sym_Cour->Code == DIV_TOKEN );
+}
+void EXPR_(){
+    if(isADDOP() || isRELOP()){
+        Sym_Suiv();
+        TERM();
+    }
+}
+int isADDOP(){
+    return (Sym_Cour->Code == MOINS_TOKEN || Sym_Cour->Code == PLUS_TOKEN );
+}
+void FACT(){
+    if(Sym_Cour->Code == ID_TOKEN){
+        Test_Symbole(ID_TOKEN);
+        ARG();
+        return;
+    }
+    if(Sym_Cour->Code == NUM_TOKEN){
+        Test_Symbole(NUM_TOKEN);
+        if(Sym_Cour->Code == PT_TOKEN){
+            Test_Symbole(PT_TOKEN);
+            Test_Symbole(NUM_TOKEN);
+        }
+
+        return;
+    }
+    if(Sym_Cour -> Code == PO_TOKEN ){
+        Test_Symbole(PO_TOKEN);
+        EXPR();
+        Test_Symbole(PF_TOKEN);
+        return;
+    }
+    if(isBOOL()){
+        Sym_Suiv();
+        return;
+    }
+    Erreur(ID_TOKEN);
+
+}
+
+int isBOOL(){
+    return (Sym_Cour->Code == BOOLEAN_TRUE_TOKEN || Sym_Cour->Code == BOOLEAN_FALSE_TOKEN);
+}
+
+void BOOLOP(){
+    EXPR();
+    if(isRELOP){
+        Sym_Suiv();
+        EXPR();
+    }
+    else{
+        Test_Symbole(EQ_TOKEN);
+    }
+}
+void ARG(){
+    if(Sym_Cour->Code == PO_TOKEN){
+        Test_Symbole(PO_TOKEN);
+        int i=0;
+        while ( Sym_Cour->Code != PF_TOKEN && Sym_Cour ->Code != FIN_TOKEN )
+        {
+            if(i!=0) Test_Symbole(VIR_TOKEN);
+            TYPE();
+            Test_Symbole(ID_TOKEN);
+            i++;
+        }
+        if( Sym_Cour->Code ==  FIN_TOKEN) return;
+        Test_Symbole(PF_TOKEN);
+        
+    }
+}
+
+//Gotta create a string parser
+
+void STR(){
+    Test_Symbole(STR_TOKEN);
+
+    Test_Symbole(ID_TOKEN);
+
+    Test_Symbole(STR_TOKEN);
+    
 }

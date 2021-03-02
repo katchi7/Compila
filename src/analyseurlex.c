@@ -78,6 +78,9 @@ OUTPUT* LireMot(){
     }if(strcmp(output->NOM,"int")==0){
         output->Code=TYPE_INT_TOKEN;
         return output;
+    }if(strcmp(output->NOM,"typedef")==0){
+        output->Code=TYPEDEF_TOKEN;
+        return output;
     }
     if(strcmp(output->NOM,"char")==0){
         output->Code=TYPE_CHAR_TOKEN;

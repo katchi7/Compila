@@ -1,4 +1,5 @@
 #include "analyseurlex.h"
+#include "analyseursyn.h"
 
 char REVERSE_ENUM [100][50]={"DEF_TOKEN","DEC_TOKEN","OUT_TOKEN","IN_TOKEN","WRITE_TOKEN","READ_TOKEN","TYPEDEF_TOKEN","UNTIL_TOKEN","DO_TOKEN","ACO_TOKEN","ACF_TOKEN",
    "DOLLAR_TOKEN","PT_TOKEN","PLUS_TOKEN","MOINS_TOKEN","MULT_TOKEN","DIV_TOKEN","VIR_TOKEN","EQ_TOKEN","AFF_TOKEN","INF_TOKEN","INFEG_TOKEN","SUP_TOKEN","SUPEG_TOKEN",
@@ -18,12 +19,14 @@ int main(){
         printf(">>>File not found!");
         exit(EXIT_FAILURE);
     }
-    
+    /*
     while (CHAR_COUR != EOF)
     {
         OUTPUT *out = analyseurLexical();
         printf("Token %d : %s ---->>>%s \n",out->Code,REVERSE_ENUM[out->Code],out->NOM);
     }
+    */
+    parse();
     /*
     if (Sym_Cour->Code ==FIN_TOKEN) printf("BRAVO: le programme est Correcte");
     else printf ("PAS BRAVO: fin de programme erronée! ");

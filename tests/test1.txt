@@ -1,4 +1,11 @@
-def main(){
+
+typedef myType {
+    int size,
+    char[50] name,
+    float price
+}
+
+def main() : void {
     x : int $
     y = 50.55 : float $
 

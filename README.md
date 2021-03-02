@@ -21,11 +21,13 @@ TYPE          := int ['[NUMBER]']
                 | String
                 | ID
                 
-========================================================================
 
-PRINT         := out << VALUE
+LOOP          := until ( BOOLOP ) { EXPRESSIONS } 
+                | do { EXPRESSIONS } until ( BOOLOP ) 
 
-READ          := in >> ID
+FOR           := for ( ID in RANGE ) { EXPRESSIONS } 
+
+
 
 
 EXP      := ID EXP' | READ | PRINT
@@ -40,10 +42,11 @@ AFF_DEC' := DEC | epsilone
 
 DEC           := : TYPE 
 
-LOOP          := until ( BOOLOP ) { EXPRESSIONS } 
-                | do { EXPRESSIONS } until ( BOOLOP ) 
 
-FOR           := for ( ID in RANGE ) { EXPRESSIONS } 
+PRINT         := out << VALUE
+
+READ          := in >> ID
+
 
 RANGE         := ID RANGE'
                 | NUMBER to NUMBER  
@@ -57,14 +60,14 @@ COND          := (BOOLOP) -> { EXPRESSIONS } [else -> { EXPRESSIONS }]
 VALUE         := EXPR OP | STR
 
 OP := RELOP EXPR | epsilon
-
+========================================================================
 BOOLOP := EXPR RELOP EXPR
 
 RELOP := == | <> | < | > | <= | >= | != | and | or 
 
-EXPR := TERM EXP'
+EXPR := TERM EXPR'
 
-EXP'   := ADDOP TERM  |  RELOP TERM | epsilon
+EXPR'   := ADDOP TERM  |  RELOP TERM | epsilon
 
 ADDOP := + | -
 
@@ -72,7 +75,7 @@ TERM := FACT { MULOP FACT }
 
 MULOP := * | /
 
-FACT := ID ARG | NUMBER | ( EXPR ) | BOOL | REAL
+FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL | REAL
 
 ARG  := ([ TYPE ID , TYPE ID , ...]) | epsilon
 
@@ -81,7 +84,7 @@ ID            := LETTRE [LETTRE | CHIFFRE]
 
 NUMBER        := CHIFFRE [ CHIFFRE ] 
 
-REAL          := NUMBER . NUMBER
+
 
 BOOL          := true | false 
 
