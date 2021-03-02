@@ -18,7 +18,7 @@ void DEC();
 void READ();
 void PRINT();
 void RANGE();
-void RANGE_();
+void BOUND();
 void VALUE();
 void BOOLOP();
 void STR();//todo

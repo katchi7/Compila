@@ -19,6 +19,7 @@ TYPE          := int ['[NUMBER]']
                 | float ['[NUMBER]'] 
                 | char ['[NUMBER]']
                 | String
+                | void
                 | ID
                 
 
@@ -50,12 +51,9 @@ PRINT         := out << VALUE
 READ          := in >> ID
 
 
-RANGE         := ID RANGE'
-                | NUMBER to NUMBER  
+RANGE         := BOUND to BOUND
 
-RANGE'        := to ID 
-                | epsilon
-
+BOUND        := ID [.ID] | NUMBER
 COND          := (BOOLOP) -> { EXPRESSIONS } [else -> { EXPRESSIONS }] 
 
 
@@ -77,7 +75,7 @@ TERM := FACT { MULOP FACT }
 
 MULOP := * | /
 
-FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL | REAL
+FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL  
 
 ARG  := ([ ID , ID , ...])| . ID[. ID ...]  | epsilon
 

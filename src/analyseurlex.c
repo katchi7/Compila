@@ -85,7 +85,12 @@ OUTPUT* LireMot(){
     if(strcmp(output->NOM,"char")==0){
         output->Code=TYPE_CHAR_TOKEN;
         return output;
-    }if(strcmp(output->NOM,"string")==0){
+    }
+    if(strcmp(output->NOM,"void")==0){
+        output->Code=TYPE_VOID_TOKEN;
+        return output;
+    }
+    if(strcmp(output->NOM,"string")==0){
         output->Code=TYPE_STRING_TOKEN;
         return output;
     }

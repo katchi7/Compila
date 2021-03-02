@@ -169,9 +169,14 @@ void TYPE(){
         Test_Symbole(TYPE_BOOL_TOKEN);
         return;
     }
-
+    //String
     if(Sym_Cour->Code == TYPE_STRING_TOKEN ) {
         Test_Symbole(TYPE_STRING_TOKEN);
+        return;
+    }
+    //VOID
+    if(Sym_Cour->Code == TYPE_VOID_TOKEN ) {
+        Test_Symbole(TYPE_VOID_TOKEN);
         return;
     }
     Test_Symbole(ID_TOKEN);
@@ -338,28 +343,25 @@ void PRINT(){
     VALUE();
 }
 void RANGE(){
-    if (Sym_Cour->Code == ID_TOKEN)
-    {
-        //ID RANGE'
-        Test_Symbole(ID_TOKEN);
-        RANGE_();
-    }
-    if (Sym_Cour->Code == NUM_TOKEN)
-    {
-        //NUMBER to NUMBER
-        Test_Symbole(NUM_TOKEN);
-        Test_Symbole(TO_TOKEN);
-        Test_Symbole(NUM_TOKEN);
-        
-    }
+    
+     BOUND();
+     Test_Symbole(TO_TOKEN);
+     BOUND();
     
 }
 
-void RANGE_(){
+void BOUND(){
 
-    if (Sym_Cour->Code == TO_TOKEN){
-        Test_Symbole(TO_TOKEN);
+    if (Sym_Cour->Code == ID_TOKEN){
         Test_Symbole(ID_TOKEN);
+        while(Sym_Cour->Code == PT_TOKEN){
+            Test_Symbole(PT_TOKEN);
+            Test_Symbole(ID_TOKEN);
+        }
+        return;
+    }
+    if(Sym_Cour->Code == NUM_TOKEN ){
+        Test_Symbole(NUM_TOKEN);
         return;
     }
 
