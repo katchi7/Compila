@@ -28,7 +28,7 @@ OUTPUT* LireMot(){
     int i=0;
     OUTPUT *output = malloc(sizeof(OUTPUT));
     while((CHAR_COUR>='A' && CHAR_COUR<='Z')||(CHAR_COUR>='a' && CHAR_COUR<='z')||(CHAR_COUR>='0' && CHAR_COUR<='9')){
-        if(i==20){
+        if(i==TAILLE_OUTPUT){
             output->Code = ERREUR_TOKEN;
             return output;
         }
@@ -83,7 +83,7 @@ OUTPUT* LireMot(){
         return output;
     }
     if(strcmp(output->NOM,"char")==0){
-        output->Code=TYPE_CHAR_TOKEN;
+        output->Code = TYPE_CHAR_TOKEN;
         return output;
     }
     if(strcmp(output->NOM,"void")==0){
@@ -239,6 +239,18 @@ OUTPUT* Lire_Car(){
     case '(':
         output->Code = PO_TOKEN;
         break;
+    case '\'':
+        LireChar();
+        output->NOM[1] = CHAR_COUR;
+        
+        if(CHAR_COUR == '\''){ output->Code = CHAR_TOKEN; output->NOM[2] = CHAR_COUR; break; }
+        LireChar();
+        output->NOM[2] = CHAR_COUR;
+        if(CHAR_COUR != '\''){
+            output ->Code = ERREUR_TOKEN;
+        }
+        else output->Code = CHAR_TOKEN;
+        break;
         
     case ')':
         output->Code = PF_TOKEN;
@@ -332,6 +344,37 @@ void Erreur(CODES_ERREURS ERR){
 }
 
 */
+OUTPUT *Lir_STR(){
+    int i=1;
+    OUTPUT *output = malloc(sizeof(OUTPUT));
+    output->NOM[0] = CHAR_COUR;
+    LireChar();
+    //"Hello /"Aabane/" test "
+    while(CHAR_COUR != '"' && CHAR_COUR != EOF){
+
+        if(i==TAILLE_OUTPUT - 1){
+            
+            output->Code = ERREUR_TOKEN;
+            return output;
+        }
+        if(CHAR_COUR == '\\'){
+             LireChar();
+             output->NOM[i] = CHAR_COUR;
+             i++;
+        }else {
+
+        output->NOM[i] = CHAR_COUR;
+        i++;
+        }
+        LireChar();
+    }
+    if(CHAR_COUR == EOF) output->Code = FIN_TOKEN;
+    else{ 
+        output->Code =  TXT_TOKEN ;
+        output->NOM[i] = '"';
+        }
+    return output;
+}
 
 OUTPUT* analyseurLexical(){
     OUTPUT *output = NULL;
@@ -349,7 +392,11 @@ OUTPUT* analyseurLexical(){
             if(CHAR_COUR>='0' && CHAR_COUR<='9'){
                 output = LireNum();
             }else{
-                output = Lire_Car();
+                if(CHAR_COUR == '"'){
+                    
+                    output = Lir_STR();
+                }
+                else output = Lire_Car();
             }
         }
     }

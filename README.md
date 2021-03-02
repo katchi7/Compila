@@ -33,7 +33,7 @@ FOR           := for ( ID in RANGE ) { EXPRESSIONS }
 
 EXP      := ID EXP' | READ | PRINT | return VALUE | break | continue | exit
 
-EXP'     := ([ID , ID , ...]) 
+EXP'     := ([VALUE , VALUE , ...]) 
             | AFF_DEC 
             | DEC
 
@@ -57,7 +57,7 @@ BOUND        := ID [.ID] | NUMBER
 COND          := (BOOLOP) -> { EXPRESSIONS } [else -> { EXPRESSIONS }] 
 
 
-VALUE         := EXPR OP | STR
+VALUE         := EXPR OP | STR | CHAR
 
 OP := RELOP EXPR | epsilon
 ========================================================================
@@ -75,9 +75,9 @@ TERM := FACT { MULOP FACT }
 
 MULOP := * | /
 
-FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL  
+FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL  | CHAR
 
-ARG  := ([ ID , ID , ...])| . ID[. ID ...]  | epsilon
+ARG  := ([ ID[. ID ...] , ID[. ID ...] , ...])| . ID[. ID ...]  | epsilon
 
 
 ID            := LETTRE [LETTRE | CHIFFRE] 
@@ -93,4 +93,5 @@ CHIFFRE       := 0|..|9
 LETTRE        := a|b|..|z|A|..|Z 
 
 STR           := " SIGMA* "
+CHAR          := 'SIGMA'
 ```

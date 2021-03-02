@@ -21,12 +21,12 @@ void RANGE();
 void BOUND();
 void VALUE();
 void BOOLOP();
-void STR();//todo
+void STR();
 void EXPR();
 void OP();
 int isRELOP();
 void TERM();
-void EXPR_();//make it better
+void EXPR_();
 void FACT();
 int isMULOP();
 int isADDOP();

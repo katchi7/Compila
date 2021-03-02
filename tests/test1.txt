@@ -6,21 +6,13 @@ typedef myType {
 }
 
 def main() : void {
-    x : int $
-    y = 50.55 : float $
-    type : myType$
-    type.name = "Mytype"$
-    ( type == 5 ) -> {
-        type = 500 $
-    }
-    ((x > y) or (x == 5) ) -> {
-        out << getLen(type) $
+    x = 'x' : char $
+    (x == 'x') -> {
+        out << x $
     }
     else -> {
-        out << "no" $
+        test = 'x'$
     }
+    
 }
 
-def getLen( myType type ) : int {
-    return type.name.length $
-}

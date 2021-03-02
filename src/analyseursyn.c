@@ -213,6 +213,7 @@ void COND(){
     
     BOOLOP();
     Test_Symbole(PF_TOKEN);
+    
     Test_Symbole(THEN_TOKEN);
     Test_Symbole(ACO_TOKEN);
     EXPRESSIONS();
@@ -277,7 +278,7 @@ void EXP_(){
                 Test_Symbole(VIR_TOKEN);
                 
             }
-            Test_Symbole(ID_TOKEN);
+            VALUE();
             i++;
         }
         if(Sym_Cour->Code == FIN_TOKEN){
@@ -369,11 +370,16 @@ void BOUND(){
 
 void VALUE(){
     
-    if(Sym_Cour->Code == STR_TOKEN){
-        
+    if(Sym_Cour->Code == TXT_TOKEN){Test_Symbole(CHAR_COUR);
+    
         STR();
+        return;
+    }else if(Sym_Cour->Code == CHAR_TOKEN){
         
-    }else{
+        Test_Symbole(CHAR_TOKEN);
+        
+    }
+    else{
         
         EXPR();
         OP();
@@ -404,7 +410,7 @@ void EXPR(){
 }
 void TERM(){
     FACT();
-    fprintf(stderr,"\nHERE\n");
+    
     if(isMULOP()){
         Sym_Suiv();
         FACT();
@@ -441,6 +447,11 @@ void FACT(){
         Test_Symbole(PO_TOKEN);
         EXPR();
         Test_Symbole(PF_TOKEN);
+        return;
+    }
+    if(Sym_Cour -> Code == CHAR_TOKEN ){
+        Test_Symbole(CHAR_TOKEN);
+        
         return;
     }
     if(isBOOL()){
@@ -481,6 +492,12 @@ void ARG(){
             if(i!=0) Test_Symbole(VIR_TOKEN);
             
             Test_Symbole(ID_TOKEN);
+            if( Sym_Cour->Code == PT_TOKEN ){
+            do{
+                Test_Symbole(PT_TOKEN);
+                Test_Symbole(ID_TOKEN);
+            }while(Sym_Cour->Code == PT_TOKEN);
+    }
             i++;
         }
         if( Sym_Cour->Code ==  FIN_TOKEN) return;
@@ -492,17 +509,13 @@ void ARG(){
             Test_Symbole(PT_TOKEN);
             Test_Symbole(ID_TOKEN);
         }while(Sym_Cour->Code == PT_TOKEN);
-        
     }
 }
 
 //Gotta create a string parser
 
 void STR(){
-    Test_Symbole(STR_TOKEN);
-
-    Test_Symbole(ID_TOKEN);
-
-    Test_Symbole(STR_TOKEN);
     
+    fprintf(stderr,"STR : %s " , Sym_Cour->NOM);
+    Test_Symbole(TXT_TOKEN);
 }
