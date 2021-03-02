@@ -97,6 +97,23 @@ OUTPUT* LireMot(){
         output->Code=BOOLEAN_FALSE_TOKEN;
         return output;
     }
+    if(strcmp(output->NOM,"return")==0){
+        output->Code=RETURN_TOKEN;
+        return output;
+    }
+    if(strcmp(output->NOM,"break")==0){
+        output->Code=BREAK_TOKEN;
+        return output;
+    }
+    if(strcmp(output->NOM,"continue")==0){
+        output->Code=CONTINUE_TOKEN;
+        return output;
+    }
+    if(strcmp(output->NOM,"exit")==0){
+        output->Code=EXIT_TOKEN;
+        return output;
+    }
+
     output->Code = ID_TOKEN;
    
     return output;

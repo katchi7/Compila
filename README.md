@@ -8,9 +8,9 @@ TYPE_DEF      := typedef ID { TYPE ID  [, TYPE ID , ... ] }
 
 FUNC          := def ID ([ TYPE ID , TYPE ID , ...]) : TYPE {EXPRESSIONS}
 
-EXPRESSIONS   := LOOP 
-                | COND 
-                | FOR
+EXPRESSIONS   := LOOP EXPRESSIONS 
+                | COND EXPRESSIONS 
+                | FOR EXPRESSIONS 
                 | EXP $ EXPRESSIONS 
                 | epsilon 
                 
@@ -30,15 +30,17 @@ FOR           := for ( ID in RANGE ) { EXPRESSIONS }
 
 
 
-EXP      := ID EXP' | READ | PRINT
+EXP      := ID EXP' | READ | PRINT | return VALUE | break | continue | exit
 
-EXP'     := ([ TYPE ID , TYPE ID , ...]) 
+EXP'     := ([ID , ID , ...]) 
             | AFF_DEC 
             | DEC
 
-AFF_DEC  := = VALUE AFF_DEC'
+AFF_DEC  := = VALUE AFF_DEC' | . ID AFF
 
 AFF_DEC' := DEC | epsilone
+
+AFF := . ID AFF | = VALUE 
 
 DEC           := : TYPE 
 
@@ -61,13 +63,13 @@ VALUE         := EXPR OP | STR
 
 OP := RELOP EXPR | epsilon
 ========================================================================
-BOOLOP := EXPR RELOP EXPR
+BOOLOP := EXPR
 
 RELOP := == | <> | < | > | <= | >= | != | and | or 
 
 EXPR := TERM EXPR'
 
-EXPR'   := ADDOP TERM  |  RELOP TERM | epsilon
+EXPR'   := ADDOP TERM | RELOP TERM  | epsilon
 
 ADDOP := + | -
 
@@ -77,7 +79,7 @@ MULOP := * | /
 
 FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL | REAL
 
-ARG  := ([ TYPE ID , TYPE ID , ...]) | epsilon
+ARG  := ([ ID , ID , ...])| . ID[. ID ...]  | epsilon
 
 
 ID            := LETTRE [LETTRE | CHIFFRE] 

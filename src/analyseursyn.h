@@ -26,11 +26,12 @@ void EXPR();
 void OP();
 int isRELOP();
 void TERM();
-void EXPR_();
+void EXPR_();//make it better
 void FACT();
 int isMULOP();
 int isADDOP();
 int isBOOL();
 void ARG();
+void AFF();
 
 #endif
