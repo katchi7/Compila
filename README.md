@@ -37,11 +37,11 @@ EXP'     := ([VALUE , VALUE , ...])
             | AFF_DEC 
             | DEC
 
-AFF_DEC  := = VALUE AFF_DEC' | . ID AFF || [NUMBER] AFF
+AFF_DEC  := = VALUE AFF_DEC' | . ID AFF || [EXPR OP] AFF
 
 AFF_DEC' := DEC | epsilone
 
-AFF := . ID AFF | [NUMBER] AFF | = VALUE 
+AFF := . ID AFF | [EXPR OP] AFF | = VALUE 
 
 DEC           := : TYPE 
 
@@ -77,9 +77,9 @@ MULOP := * | /
 
 FACT := ID ARG | NUMBER [ . NUMBER ] | ( EXPR ) | BOOL  | CHAR
 
-ARG  := ([ ID[. ID ...] , ID[. ID ...] , ...]) ARG' | . ID ARG' | [NUMBER] ARG' | epsilon
+ARG  := ([ ID[. ID ...] , ID[. ID ...] , ...]) ARG' | . ID ARG' | [EXPR OP] ARG' | epsilon
 
-ARG':= . ID ARG' | [NUMBER] ARG' | epsilon
+ARG':= . ID ARG' | [EXPR OP] ARG' | epsilon
 
 
 ID            := LETTRE [LETTRE | CHIFFRE] 
@@ -96,4 +96,6 @@ LETTRE        := a|b|..|z|A|..|Z
 
 STR           := " SIGMA* "
 CHAR          := 'SIGMA'
+COMMENTS      := # (SIGMA-{\n})* \n
+		| """ SIGMA* """
 ```

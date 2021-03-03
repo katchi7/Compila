@@ -328,7 +328,8 @@ void AFF_DEC(){
         
         Test_Symbole(CRO_TOKEN);
         
-        Test_Symbole(NUM_TOKEN);
+        EXPR();
+        OP();
         Test_Symbole(CRF_TOKEN);
         
         AFF();
@@ -353,7 +354,8 @@ void AFF(){
     }
     if(Sym_Cour->Code == CRO_TOKEN){
         Test_Symbole(CRO_TOKEN);
-        Test_Symbole(NUM_TOKEN);
+        EXPR();
+        OP();
         Test_Symbole(CRF_TOKEN);
         AFF();
         return;
@@ -565,7 +567,8 @@ void ARG(){
     if(Sym_Cour->Code == CRO_TOKEN ){
         
         Test_Symbole(CRO_TOKEN);
-        Test_Symbole(NUM_TOKEN);
+        EXPR();
+        OP();
         Test_Symbole(CRF_TOKEN);
         if(Sym_Cour->Code == CRO_TOKEN)
         ARG_();
@@ -586,7 +589,8 @@ void ARG_(){
     }if(Sym_Cour->Code == CRO_TOKEN ){
         
         Test_Symbole(CRO_TOKEN);
-        Test_Symbole(NUM_TOKEN);
+        EXPR();
+        OP();
         Test_Symbole(CRF_TOKEN);
         ARG_();
         return;

@@ -7,8 +7,8 @@ typedef myType {
 def main() : void {
     
     y = '5' : char$
-    x = str[3] : char $
-
+    x = str[y][w] : char $
+    #str = "Hello" : String $
     (y=='5')->{
         out<<"ERROR"$
     }
