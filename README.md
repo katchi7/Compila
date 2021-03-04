@@ -48,10 +48,10 @@ DEC           := : TYPE
 
 PRINT         := out << VALUE
 
-READ          := in >> ID
+READ          := in >> ID ARG'
 
 
-RANGE         := BOUND to BOUND
+RANGE         := BOUND [to BOUND] 
 
 BOUND        := ID [.ID] | NUMBER
 COND          := (BOOLOP) -> { EXPRESSIONS } [else -> { EXPRESSIONS }] 
@@ -83,6 +83,7 @@ ARG':= . ID ARG' | [EXPR OP] ARG' | epsilon
 
 
 ID            := LETTRE [LETTRE | CHIFFRE] 
+
 
 NUMBER        := CHIFFRE [ CHIFFRE ] 
 

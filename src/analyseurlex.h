@@ -36,6 +36,6 @@ void passer();
 OUTPUT* analyseurLexical();
 void PROGRAM();
 OUTPUT *Lir_STR();
-
+void Erreur( CODES_LEX cl );
 #endif
 

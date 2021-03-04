@@ -405,7 +405,7 @@ void LireComment()
 //Passer les separateurs et les commentaires
 void passer()
 {
-    while (CHAR_COUR == ' ' || CHAR_COUR == '\t' || CHAR_COUR == '\n' || CHAR_COUR == '#' || CHAR_COUR == '"')
+    while (CHAR_COUR == ' ' || CHAR_COUR == '\t' || CHAR_COUR == '\n' || CHAR_COUR == '#' )
     { //Passer les separateurs
 
         

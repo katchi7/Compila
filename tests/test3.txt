@@ -1,0 +1,13 @@
+def main() : void {
+    Arr : int[10000] $
+    x : int $
+    out << "Enter a number" $
+    in >> x $
+    for (i in 0 to x){
+        out << "Enter element" $
+        in >> Arr[i] $
+    }
+    for ( i in Arr){
+        out << i $
+    }
+}

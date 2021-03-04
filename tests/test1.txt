@@ -1,16 +1,3 @@
-typedef myType {
-    int size,
-    char[50] name,
-    float price
-}
-
 def main() : void {
-    
-    y = '5' : char$
-    x = str[y][w] : char $
-    #str = "Hello" : String $
-    (y=='5')->{
-        out<<"ERROR"$
-    }
-    
+    out << "Hello world"$
 }

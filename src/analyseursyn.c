@@ -1,5 +1,6 @@
 #include "analyseurlex.h"
 #include "analyseursyn.h"
+
 //Next token
 void Sym_Suiv(){
     Sym_Cour = analyseurLexical();
@@ -11,13 +12,8 @@ void parse(){
     PROG();
 }
 
-//Error token : TODO Make it print errors depending on error codes
-void Erreur( CODES_LEX cl ){
-    fprintf(stderr,"Error while parsing  expected %d  found %d  \n",cl,Sym_Cour->Code);
-}
-
 //Function that test id a symbole equals the expected token 
-void Test_Symbole(CODES_LEX cl){
+void Test_Symbole(CODES_LEX cl ){
     
     if(Sym_Cour->Code == cl){
         Sym_Suiv();
@@ -384,6 +380,7 @@ void READ(){
     Test_Symbole(IN_TOKEN);
     Test_Symbole(READ_TOKEN);
     Test_Symbole(ID_TOKEN);
+    ARG_();
 }
 void PRINT(){
     Test_Symbole(OUT_TOKEN);
@@ -393,9 +390,12 @@ void PRINT(){
 void RANGE(){
     
      BOUND();
-     Test_Symbole(TO_TOKEN);
-     BOUND();
+     if(Sym_Cour->Code == TO_TOKEN){
+        Test_Symbole(TO_TOKEN);
+        BOUND();
     
+     }
+     
 }
 
 void BOUND(){
@@ -570,7 +570,7 @@ void ARG(){
         EXPR();
         OP();
         Test_Symbole(CRF_TOKEN);
-        if(Sym_Cour->Code == CRO_TOKEN)
+        if(Sym_Cour->Code == CRO_TOKEN || Sym_Cour->Code == PT_TOKEN )
         ARG_();
         
         
@@ -585,7 +585,7 @@ void ARG_(){
         Test_Symbole(PT_TOKEN);
         Test_Symbole(ID_TOKEN);
         ARG_();
-        return;
+        
     }if(Sym_Cour->Code == CRO_TOKEN ){
         
         Test_Symbole(CRO_TOKEN);
