@@ -18,7 +18,7 @@ typedef struct {
     CODES_LEX Code;
     char NOM[TAILLE_OUTPUT];
 }OUTPUT;
-
+int ERROR;
 //Variables globales
 char CHAR_COUR;
 OUTPUT *Sym_Cour;
@@ -37,5 +37,6 @@ OUTPUT* analyseurLexical();
 void PROGRAM();
 OUTPUT *Lir_STR();
 void Erreur( CODES_LEX cl );
+
 #endif
 

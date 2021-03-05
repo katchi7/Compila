@@ -10,6 +10,11 @@ void parse(){
     
     Sym_Suiv();
     PROG();
+    if(ERROR){
+        printf("\033[0;31m\nParsing failed\n\033[0;37m");
+    }else{
+        printf("\033[0;32m\nParsing succeed\n\033[0;37m");
+    }
 }
 
 //Function that test id a symbole equals the expected token 
@@ -19,6 +24,7 @@ void Test_Symbole(CODES_LEX cl ){
         Sym_Suiv();
     }
     else{
+        
      Erreur(cl );}
 }
 //All the program

@@ -7,7 +7,7 @@ typedef Car {
 def main() : void {
    Carname : String$
    in >> Carname$
-   car = findCar(Carname) : Car 
+   car = findCar(Carname) : Car $
    out << car.price$ 
 }
 
