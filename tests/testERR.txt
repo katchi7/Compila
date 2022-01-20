@@ -1,0 +1,21 @@
+typedef Car {
+    String name,   
+    int nbengine ,
+    float price
+}
+
+def main() : void {
+   Carname : String$
+   in >> Carname$
+   car = findCar(Carname) : Car 
+   out << 
+}
+
+def findCar(String Carname)  Car{
+    Cars : Car$
+    for( car in Cars)
+        (Cars[i].name == Carname){
+            return car 
+        }
+    }
+}

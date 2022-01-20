@@ -1,0 +1,9 @@
+def main() : void {
+    x = 100 : int$
+    until(x==0){
+        x = x-1 $
+    }
+    do{
+        x = x+1 $
+    }until (x==100)
+}

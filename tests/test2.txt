@@ -1,0 +1,11 @@
+def main( ) : void {
+    x : int $
+    y = 15 : int$
+    out<<"Enter a number"$
+    in >> x $
+    (x > y) -> {
+        out << "Your number is bigger"$
+    }else -> {
+        out << "I won you"$
+    }
+}
